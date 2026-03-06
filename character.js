@@ -345,7 +345,7 @@ rebuildMask();
 
 const r = canvas.getBoundingClientRect();
 
-player.x = r.width / 1.9;
+player.x = r.width / 1.7;
 player.y = r.height * 0.02;
 
 {
@@ -362,4 +362,5 @@ player.y = r.height * 0.02;
 
 
 requestAnimationFrame(loop);
+
 
