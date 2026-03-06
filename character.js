@@ -195,7 +195,7 @@ const player = {
   speed: 180
 };
 
-const HITBOX = 0.32;
+const HITBOX = 0.30;
 
 
 // ================= RESIZE =================
@@ -224,7 +224,7 @@ function spriteSize() {
 
   const r = canvas.getBoundingClientRect();
 
-  const dh = r.height * 0.11;
+  const dh = r.height * 0.10;
   const scale = dh / FRAME_HEIGHT;
 
   return {
@@ -359,5 +359,6 @@ player.y = r.height * 0.02;
   player.x = p.x;
   player.y = p.y;
 }
+
 
 requestAnimationFrame(loop);
