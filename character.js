@@ -1,3 +1,4 @@
+```javascript
 // ================= CANVAS =================
 const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
@@ -12,6 +13,7 @@ addEventListener("keydown", (e) => {
   if (e.repeat) return;
 
   const k = e.key.toLowerCase();
+
   if ("wasd".includes(k)) {
     keys.add(k);
     e.preventDefault();
@@ -98,8 +100,10 @@ function rebuildMask() {
       maskCanvas.width,
       maskCanvas.height
     ).data;
+
   } catch (err) {
-    console.warn("Collision disabled (cannot read maze pixels)", err);
+
+    console.warn("Collision disabled (cannot read maze pixels).", err);
     maskData = null;
   }
 }
@@ -118,7 +122,6 @@ function isWall(x, y) {
 
   const ix = x | 0;
   const iy = y | 0;
-
   const idx = (iy * w + ix) * 4;
 
   const r = maskData[idx];
@@ -128,7 +131,10 @@ function isWall(x, y) {
 
   if (a < WALL_ALPHA_MIN) return false;
 
-  const luma = 0.2126 * r + 0.7152 * g + 0.0722 * b;
+  const luma =
+    0.2126 * r +
+    0.7152 * g +
+    0.0722 * b;
 
   return luma >= WALL_LUMA_MIN;
 }
@@ -140,6 +146,7 @@ function hitsWallAt(px, py, halfW, halfH) {
 
   const left = px - halfW + inset;
   const right = px + halfW - inset;
+
   const top = py - halfH + inset;
   const bottom = py + halfH - inset;
 
@@ -167,7 +174,10 @@ function findNearestFreeSpot(sx, sy, halfW, halfH) {
     return { x: sx, y: sy };
   }
 
-  const maxR = Math.max(maskCanvas.width, maskCanvas.height);
+  const maxR = Math.max(
+    maskCanvas.width,
+    maskCanvas.height
+  );
 
   for (let r = 2; r < maxR; r += 2) {
 
@@ -194,8 +204,6 @@ const player = {
   y: 0,
   speed: 180
 };
-
-const HITBOX = 0.30;
 
 
 // ================= RESIZE =================
@@ -232,7 +240,9 @@ function spriteSize() {
     dh: dh,
     w: r.width,
     h: r.height,
-    ready: spriteSheet.complete && spriteSheet.naturalWidth > 0
+    ready:
+      spriteSheet.complete &&
+      spriteSheet.naturalWidth > 0
   };
 }
 
@@ -243,7 +253,12 @@ function drawPlayer() {
   const { dw, dh, ready } = spriteSize();
 
   if (!ready) {
-    ctx.fillRect(player.x - dw / 2, player.y - dh / 2, dw, dh);
+    ctx.fillRect(
+      player.x - dw / 2,
+      player.y - dh / 2,
+      dw,
+      dh
+    );
     return;
   }
 
@@ -281,14 +296,17 @@ function loop(t) {
     mx = -1;
     dir = "left";
   }
+
   else if (keys.has("d")) {
     mx = 1;
     dir = "right";
   }
+
   else if (keys.has("w")) {
     my = -1;
     dir = "up";
   }
+
   else if (keys.has("s")) {
     my = 1;
     dir = "down";
@@ -300,12 +318,17 @@ function loop(t) {
 
   const { dw, dh, w, h } = spriteSize();
 
-  const hw = (dw * HITBOX) / 2;
-  const hh = (dh * HITBOX) / 2;
+  const hw = dw / 2;
+  const hh = dh / 2;
 
   if (maskData && hitsWallAt(player.x, player.y, hw, hh)) {
 
-    const p = findNearestFreeSpot(player.x, player.y, hw, hh);
+    const p = findNearestFreeSpot(
+      player.x,
+      player.y,
+      hw,
+      hh
+    );
 
     player.x = p.x;
     player.y = p.y;
@@ -315,7 +338,10 @@ function loop(t) {
 
   if (mx !== 0) {
 
-    const nx = Math.max(hw, Math.min(w - hw, player.x + mx * step));
+    const nx = Math.max(
+      hw,
+      Math.min(w - hw, player.x + mx * step)
+    );
 
     if (!hitsWallAt(nx, player.y, hw, hh)) {
       player.x = nx;
@@ -324,7 +350,10 @@ function loop(t) {
 
   if (my !== 0) {
 
-    const ny = Math.max(hh, Math.min(h - hh, player.y + my * step));
+    const ny = Math.max(
+      hh,
+      Math.min(h - hh, player.y + my * step)
+    );
 
     if (!hitsWallAt(player.x, ny, hw, hh)) {
       player.y = ny;
@@ -345,22 +374,25 @@ rebuildMask();
 
 const r = canvas.getBoundingClientRect();
 
-player.x = r.width / 1.7;
-player.y = r.height * 0.02;
+player.x = r.width * 0.55;
+player.y = r.height * 0.05;
 
 {
   const { dw, dh } = spriteSize();
 
-  const hw = (dw * HITBOX) / 2;
-  const hh = (dh * HITBOX) / 2;
+  const hw = dw / 2;
+  const hh = dh / 2;
 
-  const p = findNearestFreeSpot(player.x, player.y, hw, hh);
+  const p = findNearestFreeSpot(
+    player.x,
+    player.y,
+    hw,
+    hh
+  );
 
   player.x = p.x;
   player.y = p.y;
 }
 
-
 requestAnimationFrame(loop);
-
-
+```
