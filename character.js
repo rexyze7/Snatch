@@ -268,9 +268,9 @@ function loop(t) {
   const { dw, dh, w, h } = spriteSize();
 
   // lower-body collision box
-  const hw = dw * 0.22;
-  const hh = dh * 0.18;
-  const bodyOffsetY = dh * 0.18;
+ const hw = dw * 0.18;
+const hh = dh * 0.12;
+const bodyOffsetY = dh * 0.22;
   const collisionY = player.y + bodyOffsetY;
 
   if (maskData && hitsWallAt(player.x, collisionY, hw, hh)) {
@@ -314,9 +314,9 @@ player.y = r.height * 0.02;
 {
   const { dw, dh } = spriteSize();
 
-  const hw = dw * 0.22;
-  const hh = dh * 0.18;
-  const bodyOffsetY = dh * 0.18;
+  const hw = dw * 0.18;
+  const hh = dh * 0.12;
+  const bodyOffsetY = dh * 0.22;
   const collisionY = player.y + bodyOffsetY;
 
   const p = findNearestFreeSpot(player.x, collisionY, hw, hh);
@@ -325,5 +325,6 @@ player.y = r.height * 0.02;
 }
 
 requestAnimationFrame(loop);
+
 
 
