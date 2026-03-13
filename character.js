@@ -308,8 +308,8 @@ resize();
 rebuildMask();
 
 const r = canvas.getBoundingClientRect();
-player.x = r.width * 0.55;
-player.y = r.height * 0.05;
+player.x = r.width * 0.50;
+player.y = r.height * 0.00;
 
 {
   const { dw, dh } = spriteSize();
@@ -325,3 +325,4 @@ player.y = r.height * 0.05;
 }
 
 requestAnimationFrame(loop);
+
