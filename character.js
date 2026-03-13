@@ -1,9 +1,7 @@
-```javascript
 // ================= CANVAS =================
 const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
 const mazeEl = document.getElementById("mazeImg");
-
 
 // ================= INPUT =================
 const keys = new Set();
@@ -13,7 +11,6 @@ addEventListener("keydown", (e) => {
   if (e.repeat) return;
 
   const k = e.key.toLowerCase();
-
   if ("wasd".includes(k)) {
     keys.add(k);
     e.preventDefault();
@@ -23,7 +20,6 @@ addEventListener("keydown", (e) => {
 addEventListener("keyup", (e) => {
   keys.delete(e.key.toLowerCase());
 });
-
 
 // ================= SPRITE SHEET =================
 const spriteSheet = new Image();
@@ -46,11 +42,9 @@ const DIR_ROW = {
 
 let frameIndex = 0;
 let frameTimer = 0;
-
 const FRAME_DURATION = 0.14;
 
 function updateAnimation(dt, moving) {
-
   if (!moving) {
     frameIndex = 0;
     frameTimer = 0;
@@ -65,15 +59,12 @@ function updateAnimation(dt, moving) {
   }
 }
 
-
 // ================= COLLISION MASK =================
 const maskCanvas = document.createElement("canvas");
 const maskCtx = maskCanvas.getContext("2d", { willReadFrequently: true });
-
 let maskData = null;
 
 function rebuildMask() {
-
   const r = canvas.getBoundingClientRect();
 
   if (
@@ -100,9 +91,7 @@ function rebuildMask() {
       maskCanvas.width,
       maskCanvas.height
     ).data;
-
   } catch (err) {
-
     console.warn("Collision disabled (cannot read maze pixels).", err);
     maskData = null;
   }
@@ -112,7 +101,6 @@ const WALL_ALPHA_MIN = 10;
 const WALL_LUMA_MIN = 205;
 
 function isWall(x, y) {
-
   if (!maskData) return false;
 
   const w = maskCanvas.width;
@@ -131,22 +119,15 @@ function isWall(x, y) {
 
   if (a < WALL_ALPHA_MIN) return false;
 
-  const luma =
-    0.2126 * r +
-    0.7152 * g +
-    0.0722 * b;
-
+  const luma = 0.2126 * r + 0.7152 * g + 0.0722 * b;
   return luma >= WALL_LUMA_MIN;
 }
 
-
 function hitsWallAt(px, py, halfW, halfH) {
-
   const inset = 2;
 
   const left = px - halfW + inset;
   const right = px + halfW - inset;
-
   const top = py - halfH + inset;
   const bottom = py + halfH - inset;
 
@@ -165,26 +146,18 @@ function hitsWallAt(px, py, halfW, halfH) {
   );
 }
 
-
 function findNearestFreeSpot(sx, sy, halfW, halfH) {
-
   if (!maskData) return { x: sx, y: sy };
 
   if (!hitsWallAt(sx, sy, halfW, halfH)) {
     return { x: sx, y: sy };
   }
 
-  const maxR = Math.max(
-    maskCanvas.width,
-    maskCanvas.height
-  );
+  const maxR = Math.max(maskCanvas.width, maskCanvas.height);
 
   for (let r = 2; r < maxR; r += 2) {
-
     for (let a = 0; a < 360; a += 10) {
-
       const rad = (a * Math.PI) / 180;
-
       const x = sx + Math.cos(rad) * r;
       const y = sy + Math.sin(rad) * r;
 
@@ -197,18 +170,15 @@ function findNearestFreeSpot(sx, sy, halfW, halfH) {
   return { x: sx, y: sy };
 }
 
-
 // ================= PLAYER =================
 const player = {
   x: 0,
   y: 0,
-  speed: 180
+  speed: 180,
 };
-
 
 // ================= RESIZE =================
 function resize() {
-
   const r = canvas.getBoundingClientRect();
   const dpr = devicePixelRatio || 1;
 
@@ -226,39 +196,28 @@ if (mazeEl) {
   mazeEl.addEventListener("load", rebuildMask);
 }
 
-
 // ================= SPRITE SIZE =================
 function spriteSize() {
-
   const r = canvas.getBoundingClientRect();
 
-  const dh = r.height * 0.10;
+  const dh = r.height * 0.1;
   const scale = dh / FRAME_HEIGHT;
 
   return {
     dw: FRAME_WIDTH * scale,
-    dh: dh,
+    dh,
     w: r.width,
     h: r.height,
-    ready:
-      spriteSheet.complete &&
-      spriteSheet.naturalWidth > 0
+    ready: spriteSheet.complete && spriteSheet.naturalWidth > 0,
   };
 }
 
-
 // ================= DRAW =================
 function drawPlayer() {
-
   const { dw, dh, ready } = spriteSize();
 
   if (!ready) {
-    ctx.fillRect(
-      player.x - dw / 2,
-      player.y - dh / 2,
-      dw,
-      dh
-    );
+    ctx.fillRect(player.x - dw / 2, player.y - dh / 2, dw, dh);
     return;
   }
 
@@ -266,7 +225,6 @@ function drawPlayer() {
   const sy = DIR_ROW[dir] * FRAME_HEIGHT;
 
   ctx.imageSmoothingEnabled = false;
-
   ctx.drawImage(
     spriteSheet,
     sx,
@@ -280,12 +238,10 @@ function drawPlayer() {
   );
 }
 
-
 // ================= GAME LOOP =================
 let last = 0;
 
 function loop(t) {
-
   const dt = (t - last) / 1000 || 0;
   last = t;
 
@@ -295,104 +251,77 @@ function loop(t) {
   if (keys.has("a")) {
     mx = -1;
     dir = "left";
-  }
-
-  else if (keys.has("d")) {
+  } else if (keys.has("d")) {
     mx = 1;
     dir = "right";
-  }
-
-  else if (keys.has("w")) {
+  } else if (keys.has("w")) {
     my = -1;
     dir = "up";
-  }
-
-  else if (keys.has("s")) {
+  } else if (keys.has("s")) {
     my = 1;
     dir = "down";
   }
 
   const moving = mx !== 0 || my !== 0;
-
   updateAnimation(dt, moving);
 
   const { dw, dh, w, h } = spriteSize();
 
-  const hw = dw / 2;
-  const hh = dh / 2;
+  // lower-body collision box
+  const hw = dw * 0.22;
+  const hh = dh * 0.18;
+  const bodyOffsetY = dh * 0.18;
+  const collisionY = player.y + bodyOffsetY;
 
-  if (maskData && hitsWallAt(player.x, player.y, hw, hh)) {
-
-    const p = findNearestFreeSpot(
-      player.x,
-      player.y,
-      hw,
-      hh
-    );
-
+  if (maskData && hitsWallAt(player.x, collisionY, hw, hh)) {
+    const p = findNearestFreeSpot(player.x, collisionY, hw, hh);
     player.x = p.x;
-    player.y = p.y;
+    player.y = p.y - bodyOffsetY;
   }
 
   const step = player.speed * dt;
 
   if (mx !== 0) {
+    const nx = Math.max(hw, Math.min(w - hw, player.x + mx * step));
 
-    const nx = Math.max(
-      hw,
-      Math.min(w - hw, player.x + mx * step)
-    );
-
-    if (!hitsWallAt(nx, player.y, hw, hh)) {
+    if (!hitsWallAt(nx, collisionY, hw, hh)) {
       player.x = nx;
     }
   }
 
   if (my !== 0) {
+    const ny = Math.max(hh, Math.min(h - hh, player.y + my * step));
 
-    const ny = Math.max(
-      hh,
-      Math.min(h - hh, player.y + my * step)
-    );
-
-    if (!hitsWallAt(player.x, ny, hw, hh)) {
+    if (!hitsWallAt(player.x, ny + bodyOffsetY, hw, hh)) {
       player.y = ny;
     }
   }
 
   ctx.clearRect(0, 0, w, h);
-
   drawPlayer();
 
   requestAnimationFrame(loop);
 }
-
 
 // ================= START =================
 resize();
 rebuildMask();
 
 const r = canvas.getBoundingClientRect();
-
 player.x = r.width * 0.55;
 player.y = r.height * 0.05;
 
 {
   const { dw, dh } = spriteSize();
 
-  const hw = dw / 2;
-  const hh = dh / 2;
+  const hw = dw * 0.22;
+  const hh = dh * 0.18;
+  const bodyOffsetY = dh * 0.18;
+  const collisionY = player.y + bodyOffsetY;
 
-  const p = findNearestFreeSpot(
-    player.x,
-    player.y,
-    hw,
-    hh
-  );
-
+  const p = findNearestFreeSpot(player.x, collisionY, hw, hh);
   player.x = p.x;
-  player.y = p.y;
+  player.y = p.y - bodyOffsetY;
 }
 
 requestAnimationFrame(loop);
-```
