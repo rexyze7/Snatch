@@ -310,7 +310,7 @@ function startGame() {
   player.y = height * 0.08;
 
   const footRadius = dh * FOOT_RADIUS_SCALE;
-  const footOffsetY = dh * 0.20;
+  const footOffsetY = dh * 0.12;
 
   const open = findNearestOpenSpot(player.x, player.y + footOffsetY, footRadius);
   player.x = open.x;
