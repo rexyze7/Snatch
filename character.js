@@ -32,7 +32,7 @@ const player = {
 const keys = new Set();
 
 // smaller collision area around the feet
-const FOOT_RADIUS_SCALE = 0.09; // try 0.10 to 0.16 if needed
+const FOOT_RADIUS_SCALE = 0.07; // try 0.10 to 0.16 if needed
 
 // ===== MAZE COLLISION MASK =====
 const maskCanvas = document.createElement("canvas");
