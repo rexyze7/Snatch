@@ -257,7 +257,7 @@ function loop(t) {
   updateAnimation(dt, moving);
 
   const footRadius = dh * FOOT_RADIUS_SCALE;
-  const footOffsetY = dh * 0.20;
+  const footOffsetY = dh * 0.10;
 
   const step = player.speed * dt;
 
