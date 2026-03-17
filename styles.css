@@ -16,17 +16,6 @@ html, body {
   height: 100vh;
 }
 
-/* Background covers whole screen */
-.cave {
-  position: absolute;
-  inset: 0; /* makes the image stretch to fill the container*/
-  width: 100%;
-  height: 100%;
-  object-fit: cover;   /* cover scales the image to fill the container while keeping aspect ratio. */
-  z-index: 1; /*  z-index controls stacking order (what's in front). Lower numbers = further back.*/
-}
-
-/* Title stays on top */
 h1 {
   position: relative;
   z-index: 4;
@@ -35,25 +24,22 @@ h1 {
   padding: 16px 0;
 }
 
-/* Maze perfectly centered */
-.maze {
+.maze,
+#gameCanvas {
   position: absolute;
-  z-index: 3;
   width: min(800px, 110vmin);
-  height: auto;
+  height: min(800px, 110vmin);
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
 }
 
+.maze {
+  z-index: 3;
+}
+
 #gameCanvas {
-  position: absolute;
   z-index: 5;
-  width: min(800px, 110vmin);
-  height: min(800px, 110vmin); /* make it a square play area */
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
   background: transparent;
   pointer-events: none;
 }
